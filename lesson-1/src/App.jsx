@@ -1,9 +1,10 @@
 import "./App.css";
+import { Message } from './Message/Message';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <Message text="My first React component"/>
     </div>
   );
 }
