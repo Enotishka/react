@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import "./App.css";
 
 
-function App() {
+export function App() {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const chatBotName = "chatBot";
@@ -45,5 +45,3 @@ function App() {
     </div>
   </div>;
 }
-
-export default App;
