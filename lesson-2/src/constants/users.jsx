@@ -1,4 +1,4 @@
-export const users = {
+export const Users = {
   botName: "chatBot",
   userName: "Julia",
 };
