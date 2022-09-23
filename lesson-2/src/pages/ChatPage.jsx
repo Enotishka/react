@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Container, TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { nanoid } from "nanoid";
 import { useParams } from "react-router-dom";
 import { MessagesList } from "../components/MessagesList";
 import { ChatsList } from "../components/ChatsList";
 import { Users } from "../constants/Users";
+import { store } from "../store";
 
 export function ChatPage() {
   const { chatId } = useParams();
@@ -23,7 +24,7 @@ export function ChatPage() {
   const handleSendButton = () => {
     send({
       text: message,
-      author: Users.userName,
+      author: store.getState().name,
     });
     setMessage("");
     inputRef.current.focus();
