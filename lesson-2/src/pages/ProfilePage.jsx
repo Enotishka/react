@@ -1,22 +1,18 @@
 import { TextField, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useState } from "react";
+import React from "react";
 import { changeName, toggleProfile } from "../store/profile/actions";
 
 export const ProfilePage = () => {
-  const userNameStore = useSelector((store) => store.name);
-  const visibleStore = useSelector((store) => store.visible);
-  const [userName, setUserName] = useState(userNameStore);
-  const [visible, setVisible] = useState(visibleStore);
+  const userName = useSelector((store) => store.name);
+  const visible = useSelector((store) => store.visible);
   const dispatch = useDispatch();
 
   const handleUserNameChange = (newUserName) => {
-    setUserName(newUserName);
     dispatch(changeName(newUserName));
   };
 
   const handleToggleProfile = () => {
-    setVisible(!visible);
     dispatch(toggleProfile());
   };
 

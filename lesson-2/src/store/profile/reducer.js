@@ -8,9 +8,9 @@ const initialState = {
 export const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case CHANGE_NAME:
-      return { name: action.value };
+      return { ...state, name: action.value };
     case TOGGLE_PROFILE:
-      return { visible: !state.visible };
+      return { ...state, visible: !state.visible };
     default:
       return state;
   }
