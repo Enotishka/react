@@ -4,8 +4,8 @@ import React from "react";
 import { changeName, toggleProfile } from "../store/profile/actions";
 
 export const ProfilePage = () => {
-  const userName = useSelector((store) => store.name);
-  const visible = useSelector((store) => store.visible);
+  const userName = useSelector(({ profile }) => profile.name);
+  const visible = useSelector(({ profile }) => profile.visible);
   const dispatch = useDispatch();
 
   const handleUserNameChange = (newUserName) => {
