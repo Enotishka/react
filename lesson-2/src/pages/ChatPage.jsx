@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextField, Button, Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { MessagesList } from "../components/MessagesList";
@@ -7,6 +7,7 @@ import { Users } from "../constants/Users";
 import { useDispatch, useSelector } from "react-redux";
 import { addChat, addMessage, removeChat } from "../store/chat/actions";
 
+let timer;
 export function ChatPage() {
   const { chatId } = useParams();
   const userName = useSelector(({ profile }) => profile.name);
@@ -18,6 +19,27 @@ export function ChatPage() {
   const [message, setMessage] = useState("");
   const inputRef = React.useRef();
 
+  const addMessageWithReply = (chatId, message) => (dispatch) => {
+    dispatch(addMessage(chatId, message));
+    if (message.author === Users.botName) {
+      return;
+    }
+    console.log(`timer: ${timer}`);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(
+      () =>
+        dispatch(
+          addMessage(chatId, {
+            text: "(-_-)",
+            author: Users.botName,
+          })
+        ),
+      5000
+    );
+  };
+
   const handleSendButton = () => {
     send({
       text: message,
@@ -28,7 +50,7 @@ export function ChatPage() {
   };
 
   const send = (message) => {
-    dispatch(addMessage(chatId, message));
+    dispatch(addMessageWithReply(chatId, message));
   };
 
   const handleAddChat = (chatName) => {
@@ -38,24 +60,6 @@ export function ChatPage() {
   const handleRemoveChat = (chatId) => {
     dispatch(removeChat(chatId));
   };
-
-  useEffect(() => {
-    if (!messages || messages.length === 0) {
-      return;
-    }
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.author === Users.botName) {
-      return;
-    }
-    setTimeout(
-      () =>
-        send({
-          text: "(-_-)",
-          author: Users.botName,
-        }),
-      1500
-    );
-  }, [messages]);
 
   return (
     <>
