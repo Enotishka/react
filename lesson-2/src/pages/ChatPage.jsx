@@ -5,9 +5,10 @@ import { MessagesList } from "../components/MessagesList";
 import { ChatsList } from "../components/ChatsList";
 import { Users } from "../constants/Users";
 import { useDispatch, useSelector } from "react-redux";
-import { addChat, addMessage, removeChat } from "../store/chat/actions";
+import { addChat, addMessage, removeChat } from "../store/chat/slice";
 
 let timer;
+
 export function ChatPage() {
   const { chatId } = useParams();
   const userName = useSelector(({ profile }) => profile.name);
@@ -20,20 +21,24 @@ export function ChatPage() {
   const inputRef = React.useRef();
 
   const addMessageWithReply = (chatId, message) => (dispatch) => {
-    dispatch(addMessage(chatId, message));
+    dispatch(addMessage({ chatId, message }));
     if (message.author === Users.botName) {
       return;
     }
     console.log(`timer: ${timer}`);
     if (timer) {
       clearTimeout(timer);
+      timer = null;
     }
     timer = setTimeout(
       () =>
         dispatch(
-          addMessage(chatId, {
-            text: "(-_-)",
-            author: Users.botName,
+          addMessage({
+            chatId,
+            message: {
+              text: "(-_-)",
+              author: Users.botName,
+            },
           })
         ),
       5000
