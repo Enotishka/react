@@ -21,10 +21,21 @@ const chatSlice = createSlice({
       delete state[action.payload];
     },
     addMessage: (state, action) => {
-      state[action.payload.chatId].messages.push(action.payload.message);
+      const message = { ...action.payload.message, id: nanoid() };
+      state[action.payload.chatId].messages.push(message);
+    },
+    removeMessage: (state, action) => {
+      const { messages } = state[action.payload.chatId];
+      const index = messages.findIndex(
+        (m) => m.id === action.payload.messageId
+      );
+      if (index !== -1) {
+        messages.splice(index, 1);
+      }
     },
   },
 });
 
-export const { addChat, removeChat, addMessage } = chatSlice.actions;
+export const { addChat, removeChat, addMessage, removeMessage } =
+  chatSlice.actions;
 export const chatReducer = chatSlice.reducer;

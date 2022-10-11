@@ -5,7 +5,12 @@ import { MessagesList } from "../components/MessagesList";
 import { ChatsList } from "../components/ChatsList";
 import { Users } from "../constants/Users";
 import { useDispatch, useSelector } from "react-redux";
-import { addChat, addMessage, removeChat } from "../store/chat/slice";
+import {
+  addChat,
+  addMessage,
+  removeChat,
+  removeMessage,
+} from "../store/chat/slice";
 
 let timer;
 
@@ -58,6 +63,10 @@ export function ChatPage() {
     dispatch(addMessageWithReply(chatId, message));
   };
 
+  const handleRemoveMessage = (id) => {
+    dispatch(removeMessage({ chatId, messageId: id }));
+  };
+
   const handleAddChat = (chatName) => {
     dispatch(addChat(chatName));
   };
@@ -85,7 +94,12 @@ export function ChatPage() {
           }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            {messages && <MessagesList messages={messages} />}
+            {messages && (
+              <MessagesList
+                messages={messages}
+                onRemoveMessage={handleRemoveMessage}
+              />
+            )}
           </Box>
           <Box sx={{ display: "flex", flexGrow: 0 }}>
             <TextField
