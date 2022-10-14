@@ -3,16 +3,14 @@ import { TextField, Button, Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { MessagesList } from "../components/MessagesList";
 import { ChatsList } from "../components/ChatsList";
-import { Users } from "../constants/Users";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   addChat,
-  addMessage,
+  addMessageWithReply,
   removeChat,
   removeMessage,
 } from "../store/chat/slice";
-
-let timer;
 
 export function ChatPage() {
   const { chatId } = useParams();
@@ -25,42 +23,18 @@ export function ChatPage() {
   const [message, setMessage] = useState("");
   const inputRef = React.useRef();
 
-  const addMessageWithReply = (chatId, message) => (dispatch) => {
-    dispatch(addMessage({ chatId, message }));
-    if (message.author === Users.botName) {
-      return;
-    }
-    console.log(`timer: ${timer}`);
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    timer = setTimeout(
-      () =>
-        dispatch(
-          addMessage({
-            chatId,
-            message: {
-              text: "(-_-)",
-              author: Users.botName,
-            },
-          })
-        ),
-      5000
-    );
-  };
-
   const handleSendButton = () => {
-    send({
-      text: message,
-      author: userName,
-    });
+    dispatch(
+      addMessageWithReply({
+        chatId,
+        message: {
+          text: message,
+          author: userName,
+        },
+      })
+    );
     setMessage("");
     inputRef.current.focus();
-  };
-
-  const send = (message) => {
-    dispatch(addMessageWithReply(chatId, message));
   };
 
   const handleRemoveMessage = (id) => {

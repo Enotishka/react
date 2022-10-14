@@ -4,6 +4,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { ChatPage } from "./pages/ChatPage";
 import { MainPage } from "./pages/MainPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { ArticlesPage } from "./pages/ArticlesPage";
 import { Error404Page } from "./pages/Error404Page";
 import { TemplatePage } from "./pages/TemplatePage";
 import { persistor, store } from "./store";
@@ -20,6 +21,7 @@ export const App = () => {
               <Route index element={<ChatPage />} />
               <Route path=":chatId" element={<ChatPage />} />
             </Route>
+            <Route path="articles" element={<ArticlesPage />} />
             <Route path="*" element={<Error404Page />} />
           </Route>
         </Routes>

@@ -1,4 +1,5 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import { Users } from "../../constants/Users";
 
 const initialState = {
   0: {
@@ -35,6 +36,37 @@ const chatSlice = createSlice({
     },
   },
 });
+
+let timer;
+
+export const addMessageWithReply = createAsyncThunk(
+  "chat/addMessageWithReply",
+  (payload, { dispatch }) => {
+    const { chatId, message } = payload;
+    const { addMessage } = chatSlice.actions;
+    dispatch(addMessage(payload));
+    if (message.author === Users.botName) {
+      return;
+    }
+    console.log(`timer: ${timer}`);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(
+      () =>
+        dispatch(
+          addMessage({
+            chatId,
+            message: {
+              text: "(-_-)",
+              author: Users.botName,
+            },
+          })
+        ),
+      5000
+    );
+  }
+);
 
 export const { addChat, removeChat, addMessage, removeMessage } =
   chatSlice.actions;

@@ -6,6 +6,7 @@ const links = [
   { path: "/", caption: "Main" },
   { path: "/profile", caption: "Profile" },
   { path: "/chat", caption: "Chats" },
+  { path: "/articles", caption: "Articles" },
 ];
 
 export const TemplatePage = () => (
