@@ -1,9 +1,12 @@
 import { PropTypes } from "prop-types";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
-export const Message = ({ author, text }) => (
+export const Message = ({ author, text, id, onRemoveMessage }) => (
   <Box sx={{ p: "10px", bgcolor: "#DDF4FF", borderRadius: "10px" }}>
-    <Typography variant="h5">{author}</Typography>
+    <Box sx={{ display: "flex" }}>
+      <Typography variant="h5">{author}</Typography>
+      <Button onClick={() => onRemoveMessage(id)}>X</Button>
+    </Box>
     <Typography variant="body1">{text}</Typography>
   </Box>
 );

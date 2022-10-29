@@ -3,11 +3,15 @@ import { TextField, Button, Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { MessagesList } from "../components/MessagesList";
 import { ChatsList } from "../components/ChatsList";
-import { Users } from "../constants/Users";
-import { useDispatch, useSelector } from "react-redux";
-import { addChat, addMessage, removeChat } from "../store/chat/actions";
 
-let timer;
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addChat,
+  addMessageWithReply,
+  removeChat,
+  removeMessage,
+} from "../store/chat/slice";
+
 export function ChatPage() {
   const { chatId } = useParams();
   const userName = useSelector(({ profile }) => profile.name);
@@ -19,38 +23,22 @@ export function ChatPage() {
   const [message, setMessage] = useState("");
   const inputRef = React.useRef();
 
-  const addMessageWithReply = (chatId, message) => (dispatch) => {
-    dispatch(addMessage(chatId, message));
-    if (message.author === Users.botName) {
-      return;
-    }
-    console.log(`timer: ${timer}`);
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(
-      () =>
-        dispatch(
-          addMessage(chatId, {
-            text: "(-_-)",
-            author: Users.botName,
-          })
-        ),
-      5000
-    );
-  };
-
   const handleSendButton = () => {
-    send({
-      text: message,
-      author: userName,
-    });
+    dispatch(
+      addMessageWithReply({
+        chatId,
+        message: {
+          text: message,
+          author: userName,
+        },
+      })
+    );
     setMessage("");
     inputRef.current.focus();
   };
 
-  const send = (message) => {
-    dispatch(addMessageWithReply(chatId, message));
+  const handleRemoveMessage = (id) => {
+    dispatch(removeMessage({ chatId, messageId: id }));
   };
 
   const handleAddChat = (chatName) => {
@@ -80,7 +68,12 @@ export function ChatPage() {
           }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            {messages && <MessagesList messages={messages} />}
+            {messages && (
+              <MessagesList
+                messages={messages}
+                onRemoveMessage={handleRemoveMessage}
+              />
+            )}
           </Box>
           <Box sx={{ display: "flex", flexGrow: 0 }}>
             <TextField

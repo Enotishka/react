@@ -1,7 +1,7 @@
 import { TextField, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
-import { changeName, toggleProfile } from "../store/profile/actions";
+import { changeName, toggleProfile } from "../store/profile/slice";
 
 export const ProfilePage = () => {
   const userName = useSelector(({ profile }) => profile.name);
